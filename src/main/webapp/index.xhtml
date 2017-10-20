@@ -1,0 +1,170 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html" 
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+       
+      xmlns:p="http://primefaces.org/ui">
+    
+    <f:view contentType="text/html">
+        <h:head>
+            <f:facet name="first">
+                <meta content='text/html; charset=UTF-8' http-equiv="Content-Type"/>
+                <title>Guia06</title>
+            </f:facet>
+        </h:head>
+
+        <h:body>
+                <f:view>
+            <h:form id="tablaregistros">
+                <h1 align="left"><h:outputText value="Usuario"/></h1>
+                
+                <p:dataTable value="#{frmUsuario.modelodedatos}"
+                     var="registros"
+                     lazy="true"
+                     paginator="true"
+                     rows="7"
+                     selectionMode="single"
+                     selection="#{frmUsuario.registroUsuarios}"
+                     disabledSelection="#{frmUsuario.selections}">
+
+                    <p:ajax update=":frm_detalle:formulario :frm_detalle:btns" listener="#{frmUsuario.cambiarSeleccion()}" event="rowSelect"/>
+                    <p:column>
+                            <f:facet name="header">
+                                    <h:outputText value="ID"/>
+                            </f:facet>		
+                        <h:outputText value="#{registros.idUsuario}"/>
+                    </p:column>
+                    <p:column>
+                            <f:facet name="header">
+                                    <h:outputText value="Nombre"/>
+                            </f:facet>		
+                        <h:outputText value="#{registros.nombres}"/>
+                    </p:column>
+                    <p:column>
+                            <f:facet name="header">
+                                    <h:outputText value="Apellido"/>
+                            </f:facet>		
+                        <h:outputText value="#{registros.apellidos}"/>
+                    </p:column>
+                    <p:column>
+                            <f:facet name="header">
+                                    <h:outputText value="fechaNacimiento"/>
+                            </f:facet>		
+                        <h:outputText value="#{registros.fechaNacimiento}"/>
+                    </p:column>
+                    
+                    <p:column>
+                            <f:facet name="header">
+                                    <h:outputText value="Activo"/>
+                            </f:facet>		
+                        <h:outputText value="#{registros.activo}"/>
+                    </p:column>
+                    <p:column>
+                            <f:facet name="header">
+                                    <h:outputText value="Comentarios"/>
+                            </f:facet>		
+                        <h:outputText value="#{registros.comentarios}"/>
+                    </p:column>
+                    <p:column>
+                            <f:facet name="header">
+                                    <h:outputText value="Username"/>
+                            </f:facet>		
+                        <h:outputText value="#{registros.username}"/>
+                    </p:column>
+                    <p:column>
+                            <f:facet name="header">
+                                    <h:outputText value="Password"/>
+                            </f:facet>		
+                        <h:outputText value="#{registros.password}"/>
+                    </p:column>
+
+             </p:dataTable>
+          </h:form>
+                    
+           <br/>
+          <h:form id="frm_detalle">
+              <h3 align="left">Crear / Editar</h3>
+             <p:panel id="formulario">
+              
+                <p:focus context="formulario"/>
+                
+                <p:panelGrid id="grid_input" columns="3">
+
+                       <h:outputLabel for="id" value="ID"/>
+                       <p:inputText id="id" value="#{frmUsuario.registroUsuarios.idUsuario}"
+                                     label="id" readonly="true"/>
+                     <p:message id="msmid" for="id"/>
+
+                      <h:outputLabel for="nombre" value="Nombre"/>
+                      <p:inputText id="nombre" value="#{frmUsuario.registroUsuarios.nombres}" label="Nombre"
+                                  required="true" readonly="false"/>
+                     <p:message id="msNombre" for="nombre"/>
+                     
+                     <h:outputLabel for="Apellido" value="Apellido"/>
+                      <p:inputText id="Apellido" value="#{frmUsuario.registroUsuarios.nombres}" label="Apellido"
+                                  required="true" readonly="false"/>
+                     <p:message id="msApellido" for="apellido"/>
+
+                     
+                     <h:outputLabel for="actived" value="Activo"/>
+                     <p:selectBooleanCheckbox id="actived" value="#{frmUsuario.registroUsuarios.activo}"
+                                              disabled="false"/>
+                     <p:message id="msactived" for="actived"/>
+
+
+                     <h:outputLabel for="comentario" value="Comentario"/>
+                     <p:inputTextarea id="comentario" value="#{frmUsuario.registroUsuarios.comentarios}" label="comentario"
+                                      required="true" readonly="false"/>
+                     <p:message id="mscomentario" for="comentario"/>
+
+                                                          
+                     
+                </p:panelGrid>
+             </p:panel>
+             
+             <p:toolbar id="btns">
+                <f:facet name="left">
+                     <p:commandButton value="Crear" icon="ui-icon-disk"
+                                     validateClient="true" ajax="true"
+                                     update=":tabla_datos frm_detalle:formulario frm_detalle:btns"
+                                     rendered="#{frmUsuario.buttonAdd}"
+                                     actionListener="#{frmUsuario.guardar}"/>
+
+                    <p:commandButton value="Cancelar" icon="ui-icon-cancel"
+                                     validateClient="true" ajax="true"
+                                     update=":tabla_datos frm_detalle:formulario frm_detalle:btns"
+                                     disabled="false" resetValues="true"
+                                     actionListener="#{frmUsuario.cancelar}"
+                                     immediate="true"/>
+                                     
+                  <p:commandButton value="Eliminar" icon="ui-icon-trash"
+                                     validateClient="true" ajax="true"
+                                     update=":tabla_datos frm_detalle:formulario frm_detalle:btns"
+                                     rendered="#{frmUsuario.buttons}"
+                                     actionListener="#{frmUsuario.eliminar}"/>
+                    
+                    <p:commandButton value="Editar" icon="ui-icon-pencil"
+                                     validateClient="true" ajax="true"
+                                     update=":tabla_datos frm_detalle:formulario frm_detalle:btns"
+                                     rendered="#{frmUsuario.buttons}"
+                                     actionListener="#{frmUsuario.modificar}"/>  
+                    
+                   
+               </f:facet>
+             </p:toolbar>
+          </h:form>
+       </f:view>
+            
+            
+        </h:body>
+
+    </f:view>
+
+    
+    
+
+
+</html>
+
